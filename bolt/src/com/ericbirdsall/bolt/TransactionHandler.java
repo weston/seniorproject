@@ -19,12 +19,12 @@ public class TransactionHandler {
 
 	//Note: Sometimes this hangs 
 	public static void main(String[] args) {
-    	NetworkParameters networkParameters = new TestNet3Params();
-    	//private NetworkParameters networkParameters = new MainNetParams();
+    	//NetworkParameters networkParameters = new TestNet3Params();
+    	NetworkParameters networkParameters = new MainNetParams();
     	//Toggle this to use the main net or testnet
         //Logger LOGGER = LoggerFactory.getLogger(TransactionHandler.class);
 
-    	WalletAppKit kit = new WalletAppKit(networkParameters, new File("./wallet"), "bolt-wallet");
+    	WalletAppKit kit = new WalletAppKit(networkParameters, new File("./wallet"), "bolt-wallet-main");
         System.out.println("Starting to sync blockchain. This might take a few minutes");
         kit.setAutoSave(true);
         kit.startAsync();
