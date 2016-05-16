@@ -19,7 +19,9 @@ import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
-//import org.bitcoinj.kits.WalletAppKit;
+import java.io.*;
+import java.net.*;
+import com.ericbirdsall.bolt.*;
 
 public class TransactionHandler {
 
@@ -30,6 +32,7 @@ public class TransactionHandler {
     	//Toggle this to use the main net or testnet
         //Logger LOGGER = LoggerFactory.getLogger(TransactionHandler.class);
 
+    	
     	File walletFile = new File("./wallet");	
     	WalletAppKit kit = new WalletAppKit(networkParameters, walletFile, "bolt-wallet");
         System.out.println("Starting to sync blockchain. This might take a few minutes");
@@ -39,6 +42,10 @@ public class TransactionHandler {
         
         kit.wallet().allowSpendingUnconfirmedTransactions();
         System.out.println("Synced blockchain.");
+        
+        AddressFaucet addrFaucet = new AddressFaucet(kit.wallet());
+    	addrFaucet.start();
+    	
 	    Wallet wallet = kit.wallet();
 	    System.out.println("Your wallet address is " + wallet.currentReceiveAddress());
         System.out.println("You've got " + kit.wallet().getBalance() + " in your pocket");
@@ -46,9 +53,12 @@ public class TransactionHandler {
 	    Address faucet = new Address(networkParameters, faucetAddr);
  
 	    PeerGroup peerGroup = kit.peerGroup();
+	    
+
+	    
 	    SendRequest request = SendRequest.to(faucet, Coin.MILLICOIN);
 	    Transaction t = request.tx;
-	    t.addOutput(Transaction.MIN_NONDUST_OUTPUT, new ScriptBuilder().op(ScriptOpCodes.OP_RETURN).data("hello world".getBytes()).build());
+	    t.addOutput(Transaction.MIN_NONDUST_OUTPUT, new ScriptBuilder().op(ScriptOpCodes.OP_RETURN).data("fuck dennis".getBytes()).build());
 	    wallet.completeTx(request);
 	    wallet.commitTx(request.tx);
 	    kit.peerGroup().broadcastTransaction(request.tx);
@@ -69,19 +79,6 @@ public class TransactionHandler {
 	    
 	    
 	    
-//	    //Hacky way of getting output
-//	    Transaction testTransaction = kit.wallet().createSend(faucet, kit.wallet().getBalance().subtract(Coin.MILLICOIN));
-//        TransactionOutput output = testTransaction.getOutputs().get(0);
-//	    
-//        
-//        Transaction transaction = new Transaction(networkParameters);
-//        transaction.addInput(output);
-//        transaction.addOutput(Transaction.MIN_NONDUST_OUTPUT, new ScriptBuilder().op(ScriptOpCodes.OP_RETURN).data("hello world".getBytes()).build());
-//        
-//        Wallet.SendRequest request = Wallet.SendRequest.forTx(transaction);
-//        wallet.commitTx(request.tx);
-//        kit.peerGroup().broadcastTransaction(request.tx);
-//        System.out.println("Broadcasted transaction:" + transaction.getHashAsString());
 
         
         kit.stop();
