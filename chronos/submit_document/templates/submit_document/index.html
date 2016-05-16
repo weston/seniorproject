@@ -1,1 +1,26 @@
 {% extends 'base.html' %}
+
+{% block content %}
+<div class="container-narrow">
+	<div class="row">
+		<div class="col-sm-4"></div>
+		<div class="col-sm-4">
+			<form action="/submit_document/" method="post">
+				{% csrf_token %}
+			  <fieldset class="form-group">
+			    <label for="text">Text to hash</label>
+			    <textarea class="form-control" name="text" rows="3"></textarea>
+			  </fieldset>
+			  {% comment %}
+			  <fieldset class="form-group">
+			    <label for="exampleInputFile">File input</label>
+			    <input type="file" class="form-control-file" id="exampleInputFile">
+			    <small class="text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
+			  </fieldset>
+			  {% endcomment %}
+			  <button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+	</div>
+</div>   
+{% endblock %}
