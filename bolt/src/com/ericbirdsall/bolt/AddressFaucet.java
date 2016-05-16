@@ -32,6 +32,7 @@ public class AddressFaucet extends Thread {
 				Socket client = server.accept();
 				PrintWriter out = new PrintWriter(client.getOutputStream(),true);
 				out.println(addrString);
+				System.out.println("SENT THE RECIEVE ADDR: " + addrString);
 				client.close();
 				
 			} catch (IOException e) {
