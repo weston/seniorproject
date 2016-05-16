@@ -18,6 +18,8 @@ from django.contrib import admin
 
 urlpatterns = [
 	url(r'^about/', include('about.urls')),
+    url(r'^contact/', include('contact.urls')),
     url(r'^submit_document/', include('submit_document.urls')),
+    url(r'^verify_document/', include('verify_document.urls')),
     url(r'^admin/', include(admin.site.urls)),
 ]

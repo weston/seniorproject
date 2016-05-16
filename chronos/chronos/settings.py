@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
+    'verify_document.apps.VerifyDocumentConfig',
+    'contact.apps.ContactConfig',
     'about.apps.AboutConfig',
     'submit_document.apps.SubmitDocumentConfig',
     'django.contrib.admin',
