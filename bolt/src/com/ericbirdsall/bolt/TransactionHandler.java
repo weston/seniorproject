@@ -55,33 +55,50 @@ public class TransactionHandler {
  
 	    PeerGroup peerGroup = kit.peerGroup();
 	    
+	    
+	    int port = 7140; 
+	    ServerSocket server = new ServerSocket(port);
+	    Socket client = null;
+	    while(true){
+	    	client = server.accept();
+	    	BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+	    	String fromClient = in.readLine();
+            System.out.println("received: " + fromClient);
+            
+            SendRequest request = SendRequest.to(faucet, Coin.MILLICOIN);
+    	    Transaction t = request.tx;
+    	    t.addOutput(Transaction.MIN_NONDUST_OUTPUT, new ScriptBuilder().op(ScriptOpCodes.OP_RETURN).data(fromClient.getBytes()).build());
+    	    wallet.completeTx(request);
+    	    wallet.commitTx(request.tx);
+    	    kit.peerGroup().broadcastTransaction(request.tx);
+    	    
+    	    System.out.println("SENDING>>>");
+    	    TransactionBroadcast tb = peerGroup.broadcastTransaction(request.tx);
+//    	    try {
+//    			tb.future().get();
+//    		} catch (InterruptedException e) {
+//    			System.out.println("FIRST LINE ERROR UH OH");
+//    			e.printStackTrace();
+//    		} catch (ExecutionException e) {
+//    			System.out.println("FIRST LINE ERROR UH OH");
+//    			e.printStackTrace();
+//    		}
+    	    System.out.println("Sent transaction");
+    	    System.out.println(t.getHashAsString());
+	    		
+	    	
+
+	    }
+	   
+	    
     
-//	    SendRequest request = SendRequest.to(faucet, Coin.MILLICOIN);
-//	    Transaction t = request.tx;
-//	    t.addOutput(Transaction.MIN_NONDUST_OUTPUT, new ScriptBuilder().op(ScriptOpCodes.OP_RETURN).data("fuck dennis".getBytes()).build());
-//	    wallet.completeTx(request);
-//	    wallet.commitTx(request.tx);
-//	    kit.peerGroup().broadcastTransaction(request.tx);
-//	    
-//
-//	    TransactionBroadcast tb = peerGroup.broadcastTransaction(request.tx);
-//	    try {
-//			tb.future().get();
-//		} catch (InterruptedException e) {
-//			System.out.println("FIRST LINE ERROR UH OH");
-//			e.printStackTrace();
-//		} catch (ExecutionException e) {
-//			System.out.println("FIRST LINE ERROR UH OH");
-//			e.printStackTrace();
-//		}
-//	    System.out.println("Sent transaction");
-//	    System.out.println(t.getHashAsString());
+	    
 	    
 	    
 	    
 
         
-        kit.stop();
+        //kit.stop();
 
 	}
 
