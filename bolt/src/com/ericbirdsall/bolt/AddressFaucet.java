@@ -41,13 +41,6 @@ public class AddressFaucet extends Thread {
 				return;
 			}
 
-			
-			
-			
-			//Listen on the socket for the connection
-			//WHen it recieves a connection
-			//Send wallet address
-			//Close connection
 
 		}
 		

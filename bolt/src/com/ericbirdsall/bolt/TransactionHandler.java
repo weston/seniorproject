@@ -50,12 +50,12 @@ public class TransactionHandler {
 	    System.out.println("Your wallet address is " + wallet.currentReceiveAddress());
         System.out.println("You've got " + kit.wallet().getBalance() + " in your pocket");
         String faucetAddr = "mwmabpJVisvti3WEP5vhFRtn3yqHRD9KNP";
-	    Address faucet = new Address(networkParameters, faucetAddr);
+	    
+        Address faucet = new Address(networkParameters, faucetAddr);
  
 	    PeerGroup peerGroup = kit.peerGroup();
 	    
-//
-//	    
+    
 //	    SendRequest request = SendRequest.to(faucet, Coin.MILLICOIN);
 //	    Transaction t = request.tx;
 //	    t.addOutput(Transaction.MIN_NONDUST_OUTPUT, new ScriptBuilder().op(ScriptOpCodes.OP_RETURN).data("fuck dennis".getBytes()).build());
