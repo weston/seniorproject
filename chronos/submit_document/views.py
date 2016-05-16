@@ -12,4 +12,5 @@ def index(request):
 		return HttpResponse(template.render(request))
 	if request.method == 'POST':
 		template = loader.get_template('submit_document/index.html')
-		return HttpResponse(template.render(request))
+		text = request.POST['text']
+		return HttpResponse(template.render(request, {'text':text}))
