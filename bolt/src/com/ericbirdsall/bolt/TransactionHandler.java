@@ -54,28 +54,28 @@ public class TransactionHandler {
  
 	    PeerGroup peerGroup = kit.peerGroup();
 	    
-
-	    
-	    SendRequest request = SendRequest.to(faucet, Coin.MILLICOIN);
-	    Transaction t = request.tx;
-	    t.addOutput(Transaction.MIN_NONDUST_OUTPUT, new ScriptBuilder().op(ScriptOpCodes.OP_RETURN).data("fuck dennis".getBytes()).build());
-	    wallet.completeTx(request);
-	    wallet.commitTx(request.tx);
-	    kit.peerGroup().broadcastTransaction(request.tx);
-	    
-
-	    TransactionBroadcast tb = peerGroup.broadcastTransaction(request.tx);
-	    try {
-			tb.future().get();
-		} catch (InterruptedException e) {
-			System.out.println("FIRST LINE ERROR UH OH");
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			System.out.println("FIRST LINE ERROR UH OH");
-			e.printStackTrace();
-		}
-	    System.out.println("Sent transaction");
-	    System.out.println(t.getHashAsString());
+//
+//	    
+//	    SendRequest request = SendRequest.to(faucet, Coin.MILLICOIN);
+//	    Transaction t = request.tx;
+//	    t.addOutput(Transaction.MIN_NONDUST_OUTPUT, new ScriptBuilder().op(ScriptOpCodes.OP_RETURN).data("fuck dennis".getBytes()).build());
+//	    wallet.completeTx(request);
+//	    wallet.commitTx(request.tx);
+//	    kit.peerGroup().broadcastTransaction(request.tx);
+//	    
+//
+//	    TransactionBroadcast tb = peerGroup.broadcastTransaction(request.tx);
+//	    try {
+//			tb.future().get();
+//		} catch (InterruptedException e) {
+//			System.out.println("FIRST LINE ERROR UH OH");
+//			e.printStackTrace();
+//		} catch (ExecutionException e) {
+//			System.out.println("FIRST LINE ERROR UH OH");
+//			e.printStackTrace();
+//		}
+//	    System.out.println("Sent transaction");
+//	    System.out.println(t.getHashAsString());
 	    
 	    
 	    
