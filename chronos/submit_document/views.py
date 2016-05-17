@@ -34,7 +34,11 @@ def sendHashToServer(hash_dat):
 def index(request):
 	if request.method == 'GET':
 		template = loader.get_template('submit_document/index.html')
-		newAddr = getNewWalletAddr()
+		newAddr = ''
+		try:
+			newAddr = getNewWalletAddr()
+		except Exception as e:
+			newAddr ="Address not found. Is Bolt running?"
 		ctx = {}	
 		ctx['addr'] = newAddr
 		context = Context(ctx)
