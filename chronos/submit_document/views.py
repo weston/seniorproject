@@ -7,6 +7,7 @@ RECV_HOST = "localhost"
 RECV_PORT = 8050
 SEND_HOST = "localhost"
 SEND_PORT = 7140
+SECONDARY_SEND_PORT = 7141
 
 def getNewWalletAddr():
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -15,27 +16,36 @@ def getNewWalletAddr():
 	sock.close(); 
 	return data 
 
-def sendHashToServer(hash):
-	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM);
+def sendHashToServer(hash_dat):
+	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	sock.connect((SEND_HOST,SEND_PORT))
-	sock.sendall(hash)
+	sock.sendall(hash_dat)
 	sock.close()
+	sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+	sock.connect((SEND_HOST,SECONDARY_SEND_PORT))
+	blockHash = sock.recv(1024)
+	sock.close()
+	return blockHash
+
+
 
 # Create your views here.
 @csrf_exempt
 def index(request):
-
 	if request.method == 'GET':
 		template = loader.get_template('submit_document/index.html')
 		newAddr = getNewWalletAddr()
 		ctx = {}	
-		ctx['msg'] = "Please send bitcoin to this address: " + newAddr
+		ctx['addr'] = newAddr
 		context = Context(ctx)
+		ctx["control"] = "GET"
 		return HttpResponse(template.render(context))
+	
 	if request.method == 'POST':
 		template = loader.get_template('submit_document/index.html')
-		sendHashToServer(request.POST['text'])
+		print request.POST['text']
+		blockhash = sendHashToServer(request.POST['text'])
 		ctx = {}
-		ctx['msg'] = "Thank you for submitting your hash. "
-		ctx['msg'] += "You will soon be able to see your document on the block chain."
+		ctx['blockhash'] = blockhash
+		ctx['control'] = "POST"
 		return HttpResponse(template.render(Context(ctx)))

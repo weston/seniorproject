@@ -13,11 +13,8 @@ import org.bitcoinj.script.ScriptOpCodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongycastle.util.encoders.Hex;
-import java.io.File;
-import java.io.IOException;
+
 import java.math.BigInteger;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
 import java.io.*;
 import java.net.*;
@@ -57,35 +54,33 @@ public class TransactionHandler {
 	    
 	    
 	    int port = 7140; 
+	    int secondary_port = 7141;
 	    ServerSocket server = new ServerSocket(port);
+	    ServerSocket secondary_server = new ServerSocket(secondary_port);
 	    Socket client = null;
 	    while(true){
 	    	client = server.accept();
 	    	BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 	    	String fromClient = in.readLine();
             System.out.println("received: " + fromClient);
-            
             SendRequest request = SendRequest.to(faucet, Coin.MILLICOIN);
     	    Transaction t = request.tx;
     	    t.addOutput(Transaction.MIN_NONDUST_OUTPUT, new ScriptBuilder().op(ScriptOpCodes.OP_RETURN).data(fromClient.getBytes()).build());
+    	    client.close();
+    	  
+    	    
     	    wallet.completeTx(request);
     	    wallet.commitTx(request.tx);
     	    kit.peerGroup().broadcastTransaction(request.tx);
-    	    
-    	    System.out.println("SENDING>>>");
-    	    TransactionBroadcast tb = peerGroup.broadcastTransaction(request.tx);
-//    	    try {
-//    			tb.future().get();
-//    		} catch (InterruptedException e) {
-//    			System.out.println("FIRST LINE ERROR UH OH");
-//    			e.printStackTrace();
-//    		} catch (ExecutionException e) {
-//    			System.out.println("FIRST LINE ERROR UH OH");
-//    			e.printStackTrace();
-//    		}
     	    System.out.println("Sent transaction");
     	    System.out.println(t.getHashAsString());
-	    		
+    	    
+    	    //Had to create a new client instance... I would prefer not to do this...
+    	    client = secondary_server.accept();
+			PrintWriter out = new PrintWriter(client.getOutputStream(),true);
+			out.println(t.getHashAsString());
+			client.close();
+    	    ///
 	    	
 
 	    }
