@@ -1,85 +1,85 @@
 {% extends 'base.html' %}
-
+ 
 {% block content %}
 {% load staticfiles %}
 <script src="{% static 'submit_document/FileSaver.js' %}"></script>
 <script src = "http://www.bichlmeier.info/sha256.js"></script>
 <div class="row">
-	<center>
-		{% if control == "POST" %}
-			<p style="font-size:16px">Thank you for submitting your document.</p>
-			<p style="font-size:16px">You will soon be able to see your document on the block chain. Use this hash to find your block in a block explorer. </p>
-			<b><p style ="font-size:15px"> {{blockhash}}</p></b>
-			<a href = "https://www.blocktrail.com/tBTC/tx/{{blockhash}}" target="_blank" style="font-size:18px"> Or find your block on blocktrail.com</a>
-		{% endif %}
-
-		{% if control == "GET" %}
-			<p style="font-size:16px">Please send bitcoins to this address:</p>
-			<b><p style ="font-size:16px"> {{addr}}</p></b>
-		{% endif %}
-		
-	<br/><br/>
-	<center>
-		<input type="file" id="files" name="files[]"/>
-	</center>
-	<form action="/submit_document/" method="post">
-		{% csrf_token %}
-	  <fieldset class="form-group">
-	  <br>
-	  <center>
-	  	<label for="email">Notification Email:</label>
-	    <input class="form-control" name="email" rows="3" style="max-width:30%"></input>
-	    <input type="hidden" class="form-control" name="addr" value="{{addr}}"></input>
-	    <br>
-	    <br>
-	    <label for="text">Document Hash:</label>
-	    <textarea readonly class="form-control" name="text" rows="1" id = 'textarea' style="max-width:50%"></textarea>
-
-	    </center>
-	  </fieldset>
-			  {% comment %}
-			  <fieldset class="form-group">
-			    <label for="exampleInputFile">File input</label>
-			    <input type="file" class="form-control-file" id="exampleInputFile">
-			    <small class="text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
-			  </fieldset>
-			  {% endcomment %}
-			  <center><button type="submit" class="btn btn-primary"style="padding-left: 100px; padding-right: 100px" onclick="downloadToken()">Submit</button></center>
-			</form>
-			<div>
-				<textarea readonly hidden='true' id = 'hiddentext'></textarea>
-			</div>
-		</div>
-	</div>
-</div>   
-
-
+    <center>
+        {% if control == "POST" %}
+            <p style="font-size:16px">Thank you for submitting your document.</p>
+            <p style="font-size:16px">You will soon be able to see your document on the block chain. Use this hash to find your block in a block explorer. </p>
+            <b><p style ="font-size:15px"> {{blockhash}}</p></b>
+            <a href = "https://www.blocktrail.com/tBTC/tx/{{blockhash}}" target="_blank" style="font-size:18px"> Or find your block on blocktrail.com</a>
+        {% endif %}
+ 
+        {% if control == "GET" %}
+            <p style="font-size:16px">Please send bitcoins to this address:</p>
+            <b><p style ="font-size:16px"> {{addr}}</p></b>
+        {% endif %}
+       
+    <br/><br/>
+    <center>
+        <input type="file" id="files" name="files[]"/>
+    </center>
+    <form action="/submit" method="post">
+        {% csrf_token %}
+      <fieldset class="form-group">
+      <br>
+      <center>
+        <label for="email">Notification Email:</label>
+        <input class="form-control" name="email" rows="3" style="max-width:30%"></input>
+        <input type="hidden" class="form-control" name="addr" value="{{addr}}"></input>
+        <br>
+        <br>
+        <label for="text">Document Hash:</label>
+        <textarea readonly class="form-control" name="text" rows="1" id = 'textarea' style="max-width:50%"></textarea>
+ 
+        </center>
+      </fieldset>
+              {% comment %}
+              <fieldset class="form-group">
+                <label for="exampleInputFile">File input</label>
+                <input type="file" class="form-control-file" id="exampleInputFile">
+                <small class="text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
+              </fieldset>
+              {% endcomment %}
+              <center><button type="submit" class="btn btn-primary"style="padding-left: 100px; padding-right: 100px" onclick="downloadToken()">Submit</button></center>
+            </form>
+            <div>
+                <textarea readonly hidden='true' id = 'hiddentext'></textarea>
+            </div>
+        </div>
+    </div>
+</div>  
+ 
+ 
 <script>
   function handleFileSelect(evt) {
-    var f = evt.target.files[0]; 
-	var reader = new FileReader();
-
+    var f = evt.target.files[0];
+    var reader = new FileReader();
+ 
     reader.onload = (function(theFile) {
-       	return function(e) {
-         	var text = e.target.result;
-         	var hash = sha256_digest(text);
-         	document.getElementById("textarea").innerHTML = hash;
-         	document.getElementById("hiddentext").innerHTML = text;
-        	};
-     	})(f);
-    	reader.readAsText(f);
-    
- 	}
- 	function downloadToken(){
- 		var text = document.getElementById("hiddentext").innerHTML;
- 		var MAGIC="WESTONMIZUMOTOERICBIRDSALLDENNISFANG";
- 		var blob = new Blob([MAGIC + text + MAGIC], {});
-		saveAs(blob, "token.bpoe");
-
-
- 	}
+        return function(e) {
+            var text = e.target.result;
+            var hash = sha256_digest(text);
+            document.getElementById("textarea").innerHTML = hash;
+            document.getElementById("hiddentext").innerHTML = text;
+            };
+        })(f);
+        reader.readAsText(f);
+   
+    }
+    function downloadToken(){
+        var text = document.getElementById("hiddentext").innerHTML;
+        var MAGIC="WESTONMIZUMOTOERICBIRDSALLDENNISFANG";
+        var blob = new Blob([MAGIC + text + MAGIC], {});
+        saveAs(blob, "token.bpoe");
+ 
+ 
+    }
   document.getElementById('files').addEventListener('change', handleFileSelect, false);
 </script>
-
-
+ 
+ 
 {% endblock %}

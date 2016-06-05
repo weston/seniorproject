@@ -5,6 +5,8 @@ import socket
 from django.template import Context, Template
 from models import User
 import utilities
+from django.shortcuts import redirect
+
 
 #Coinbase API
 from coinbase.wallet.client import Client
@@ -66,11 +68,11 @@ def index(request):
 		context = Context(ctx)
 		ctx["control"] = "GET"
 		return HttpResponse(template.render(context))
-	
+
+@csrf_exempt
+def submit(request):
 	if request.method == 'POST':
 		#We need use webhooks to check if the coinbase api wallet thingy does shit.
-		template = loader.get_template('submit_document/index.html')
-
 		btc_address = request.POST['addr']
 		user_email = request.POST['email']
 		hash_value = request.POST['text']
@@ -98,5 +100,13 @@ def index(request):
 		ctx = {}
 		ctx['blockhash'] = blockhash
 		ctx['control'] = "POST"
+		return redirect('submit_success')
 
-		return HttpResponse(template.render(Context(ctx)))
+
+
+@csrf_exempt
+def submit_success(request):
+	template = loader.get_template('submit_document/submit_success.html')
+	#doesn't currently save block information into ctx that the view needs
+	ctx = {}
+	return HttpResponse(template.render(Context(ctx)))

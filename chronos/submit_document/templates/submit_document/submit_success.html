@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-narrow">
+	<div class="row">
+		<div class="col-sm-4">
+		
+		</div>
+		<div class="col-sm-11">
+		<center>
+			
+				<p style="font-size:16px">Thank you for subitting your document.</p>
+				<p style="font-size:16px">You will soon be able to see your document on the block chain. Use this hash to find your block in a block explorer. </p>
+				<b><p style ="font-size:15px"> {{blockhash}}</p></b>
+				<a href = "https://www.blocktrail.com/tBTC/tx/{{blockhash}}" target="_blank" style="font-size:18px"> Or find your block on blocktrail.com</a>
+
+			
+
+		</center>
+			
+		</div>
+	</div>
+</div>   
+{% endblock %}
