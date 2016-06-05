@@ -56,7 +56,7 @@ def submit(request):
 						   hash_value=hash_value,
 						   payment_received=False)
 
-		user.save()
+		#user.save()
 
 		success = False
 		try:
@@ -73,12 +73,13 @@ def submit(request):
 		ctx = {}
 		ctx['blockhash'] = blockhash
 		ctx['control'] = "POST"
-		return redirect('submit_success')
+		return redirect('submit_success', address=btc_address)
 
 
 
 @csrf_exempt
-def submit_success(request):
+def submit_success(request, address):
+	#print address
 	template = loader.get_template('submit_document/submit_success.html')
 	#doesn't currently save block information into ctx that the view needs
 	ctx = {}

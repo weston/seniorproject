@@ -8,5 +8,5 @@ urlpatterns = [
 	url(r'^submit$', views.submit, name='submit'),
 	url(r'^submit_success$', views.submit_success, name='submit_success'),
 	url(r'^coinbase_hook$', utilities.coinbase_hook, name='coinbase_hook'),
-
+	url(r'^submit_success/(?P<address>[\w\-]+)/$', views.submit_success, name='submit_success'),
 ]
