@@ -18,25 +18,6 @@ SEND_HOST = "localhost"
 SEND_PORT = 7140
 SECONDARY_SEND_PORT = 7141
 
-def getNewWalletAddr():
-	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	sock.connect((RECV_HOST, RECV_PORT))
-	data = sock.recv(1024)
-	sock.close(); 
-	return data 
-
-def sendHashToServer(hash_dat):
-	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	sock.connect((SEND_HOST,SEND_PORT))
-	sock.sendall(hash_dat)
-	sock.close()
-	sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-	sock.connect((SEND_HOST,SECONDARY_SEND_PORT))
-	blockHash = sock.recv(1024)
-	sock.close()
-	return blockHash
-
-
 
 # Create your views here.
 @csrf_exempt
@@ -55,13 +36,6 @@ def index(request):
 		addr = account.create_address()
 		newAddr = addr.address
 		template = loader.get_template('submit_document/index.html')
-
-		# Now we get the addr from the coinbase template
-		# newAddr = ''
-		# try:
-		# 	newAddr = getNewWalletAddr()
-		# except Exception as e:
-		# 	newAddr ="Address not found. Is Bolt running?"
 
 		ctx = {}	
 		ctx['addr'] = newAddr
@@ -86,11 +60,10 @@ def submit(request):
 
 		success = False
 		try:
-			#blockhash = sendHashToServer(hash_value)
 			blockhash = 'testvalue'
 			success = True
 		except Exception as e:
-			pass
+			print e.stacktrace()
 
 		if success:
 			utilities.sendEmailToUser(user_email, blockhash)
