@@ -52,7 +52,7 @@ def submit(request):
 						   hash_value=hash_value,
 						   payment_received=False)
 
-		#user.save()
+		user.save()
 
 		success = False
 		try:
