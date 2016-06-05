@@ -3,12 +3,15 @@ import json
 import socket
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string, get_template
+from django.template import Context, Template
 from django.http import HttpResponse
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 from models import User
+
+
 
 USERNAME    = 'chronobytesnoreply@gmail.com'
 PASSWORD = 'seniorproject2016'
@@ -32,12 +35,16 @@ def sendEmailToUser(to_email, txn_hash):
 	msg['Subject'] = "Link"
 	msg['From'] = USERNAME
 	msg['To'] = to_email
-    # ctx = {
-    #     'txn_hash': txn_hash
-    # }
-	#message = get_template('static/email_body.html').render(Context(ctx))
+	# ctx = {
+	# 	'HASH_PLACEHOLDER': txn_hash,
+	# 	'EMAIL_PLACEHOLDER': to_email
+	# }
+
+	#html_message = get_template('static/email_body.html').render(Context(ctx))
 	text_message = "Text version"
 	html_message = render_to_string('email_body.html', {})
+	html_message = html_message.replace("HASH_PLACEHOLDER",txn_hash)
+	html_message = html_message.replace("EMAIL_PLACEHOLDER",to_email)
 
 	msg.attach(MIMEText(text_message, 'plain'))
 	msg.attach(MIMEText(html_message, 'html'))
