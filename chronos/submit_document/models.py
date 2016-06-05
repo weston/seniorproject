@@ -2,4 +2,8 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-# Create your models here.
+class User(models.Model):
+	email = models.CharField(max_length=64)
+	btc_address = models.CharField(max_length=64)
+	document_hash = models.CharField(max_length=64)
+	payment_received = models.BooleanField()
