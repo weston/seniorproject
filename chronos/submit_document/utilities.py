@@ -2,7 +2,11 @@ import smtplib
 import json
 import socket
 from django.views.decorators.csrf import csrf_exempt
+from django.template.loader import render_to_string, get_template
 from django.http import HttpResponse
+
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 from models import User
 
@@ -23,26 +27,28 @@ def sendHashToServer(hash_dat):
 	sock.close()
 	return blockHash
 
-def sendEmailToUser(to_email, blockhash):
-	message_body = 'Your document was placed in the document with the hash: ' + blockhash + '\n\n'
-	message_body+= 'You can see your block at this link: https://www.blocktrail.com/tBTC/tx/' + blockhash + '\n\n'
-	fromaddr = 'chronobytesnoreply@gmail.com'
-	toaddrs  = to_email
-	msg = "\r\n".join([
-		"From: chronobytesnoreply@gmail.com",
-		"To: chronobytesnoreply@gmail.com",
-		"Subject: Your Chronobyt.es Document Status",
-		"",
-		message_body
-	])
-	username = USERNAME
-	password = PASSWORD
+def sendEmailToUser(to_email, txn_hash):
+	msg = MIMEMultipart('alternative')
+	msg['Subject'] = "Link"
+	msg['From'] = USERNAME
+	msg['To'] = to_email
+    # ctx = {
+    #     'txn_hash': txn_hash
+    # }
+	#message = get_template('static/email_body.html').render(Context(ctx))
+	text_message = "Text version"
+	html_message = render_to_string('email_body.html', {})
+
+	msg.attach(MIMEText(text_message, 'plain'))
+	msg.attach(MIMEText(html_message, 'html'))
+
 	server = smtplib.SMTP('smtp.gmail.com:587')
 	server.ehlo()
 	server.starttls()
-	server.login(username,password)
-	server.sendmail(fromaddr, toaddrs, msg)
+	server.login(USERNAME,PASSWORD)
+	server.sendmail(USERNAME, to_email, msg.as_string())
 	server.quit()
+	print "Email sent"
 
 @csrf_exempt
 def coinbase_hook(request):
