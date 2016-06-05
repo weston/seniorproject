@@ -2,6 +2,8 @@
 *.sqlite3
 .DS_Store
 
+chronos/submit_document/migrations/*
+
 .metadata
 bin/
 tmp/
