@@ -81,3 +81,13 @@ def submit_success(request, address):
 	ctx = {}
 	ctx["addr"]=address
 	return HttpResponse(template.render(Context(ctx)))
+
+
+@csrf_exempt
+def verify_document(request):
+	template = loader.get_template('submit_document/index.html')
+
+	ctx = {}	
+	ctx["control"] = "GET"
+	return HttpResponse(template.render(Context(ctx)))
+
