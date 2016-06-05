@@ -85,7 +85,7 @@ def submit_success(request, address):
 
 @csrf_exempt
 def verify_document(request):
-	template = loader.get_template('submit_document/index.html')
+	template = loader.get_template('submit_document/verify_document.html')
 
 	ctx = {}	
 	ctx["control"] = "GET"
