@@ -3,6 +3,8 @@ from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 import socket
 from django.template import Context, Template
+from django.shortcuts import redirect
+
 
 #Coinbase API
 from coinbase.wallet.client import Client
@@ -74,7 +76,8 @@ def index(request):
 
 		template = loader.get_template('submit_document/index.html')
 		to_email = request.POST['email']
-		blockhash = sendHashToServer(request.POST['text'])
+		#blockhash = sendHashToServer(request.POST['text'])
+		blockhash = 'suh dude'
 		ctx = {}
 		ctx['blockhash'] = blockhash
 		ctx['control'] = "POST"
@@ -109,6 +112,59 @@ def index(request):
 
 
 		return HttpResponse(template.render(Context(ctx)))
+
+@csrf_exempt
+def submit(request):
+	if request.method == 'POST':
+		#We need use webhooks to check if the coinbase api wallet thingy does shit.
+
+		template = loader.get_template('submit_document/index.html')
+		to_email = request.POST['email']
+		#blockhash = sendHashToServer(request.POST['text'])
+		blockhash = 'suh dude'
+		ctx = {}
+		ctx['blockhash'] = blockhash
+		ctx['control'] = "POST"
+
+
+		message_body = 'Your document was placed in the document with the hash: ' + blockhash + '\n\n'
+		message_body+= 'You can see your block at this link: https://www.blocktrail.com/tBTC/tx/' + blockhash + '\n\n'
+
+		##Verify that this email is okay
+		##Then uncomment this
+		to_email = 'chronobytesnoreply@gmail.com'
+		##
+		##
+
+		fromaddr = 'chronobytesnoreply@gmail.com'
+		toaddrs  = to_email
+		msg = "\r\n".join([
+			"From: chronobytesnoreply@gmail.com",
+			"To: chronobytesnoreply@gmail.com",
+			"Subject: Your Chronobyt.es Document Status",
+			"",
+			message_body
+		])
+		username = USERNAME
+		password = PASSWORD
+		server = smtplib.SMTP('smtp.gmail.com:587')
+		server.ehlo()
+		server.starttls()
+		server.login(username,password)
+		server.sendmail(fromaddr, toaddrs, msg)
+		server.quit()
+
+
+		return redirect('submit_success')
+
+
+
+@csrf_exempt
+def submit_success(request):
+	template = loader.get_template('submit_document/submit_success.html')
+	#doesn't currently save block information into ctx that the view needs
+	ctx = {}
+	return HttpResponse(template.render(Context(ctx)))
 
 
 
