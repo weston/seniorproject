@@ -71,14 +71,15 @@ def index(request):
 	
 	if request.method == 'POST':
 		#We need use webhooks to check if the coinbase api wallet thingy does shit.
-
 		template = loader.get_template('submit_document/index.html')
-		to_email = request.POST['email']
+
+		btc_address = request.POST['address']
+		user_email = request.POST['email']
 		blockhash = sendHashToServer(request.POST['text'])
+
 		ctx = {}
 		ctx['blockhash'] = blockhash
 		ctx['control'] = "POST"
-
 
 		message_body = 'Your document was placed in the document with the hash: ' + blockhash + '\n\n'
 		message_body+= 'You can see your block at this link: https://www.blocktrail.com/tBTC/tx/' + blockhash + '\n\n'
