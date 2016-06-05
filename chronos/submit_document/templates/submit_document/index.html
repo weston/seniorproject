@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load staticfiles %}
+<script src="{% static 'submit_document/FileSaver.js' %}"></script>
+<script src = "http://www.bichlmeier.info/sha256.js"></script>
+
 <div class="container-narrow">
 	<div class="row">
 		<div class="col-sm-4">
@@ -25,6 +29,11 @@
 			
 
 		</center>
+		<center>
+		<br/><br/><br/>
+		<input type="file" id="files" name="files[]"/>
+		<output id="list"></output>
+		</center>
 			<form action="/submit_document/" method="post">
 				{% csrf_token %}
 			  <fieldset class="form-group">
@@ -34,7 +43,7 @@
 			    <input class="form-control" name="email" rows="3" style="max-width:30%"></inputs>
 			    <br\><br/><br/>
 			    <label for="text">Document Hash:</label>
-			    <textarea class="form-control" name="text" rows="3" style="max-width:50%"></textarea>
+			    <textarea readonly class="form-control" name="text" rows="1" id = 'textarea' style="max-width:50%"></textarea>
 
 			    </center>
 			  </fieldset>
@@ -45,9 +54,43 @@
 			    <small class="text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
 			  </fieldset>
 			  {% endcomment %}
-			  <center><button type="submit" class="btn btn-primary"style="padding-left: 100px; padding-right: 100px" >Submit</button></center>
+			  <center><button type="submit" class="btn btn-primary"style="padding-left: 100px; padding-right: 100px" onclick="downloadToken()">Submit</button></center>
 			</form>
+			<div>
+				<textarea readonly hidden='true' id = 'hiddentext'></textarea>
+			</div>
 		</div>
 	</div>
 </div>   
+<script>
+  function handleFileSelect(evt) {
+    var f = evt.target.files[0]; 
+	var reader = new FileReader();
+
+    reader.onload = (function(theFile) {
+       	return function(e) {
+         	var text = e.target.result;
+         	var hash = sha256_digest(text);
+         	document.getElementById("textarea").innerHTML = hash;
+         	document.getElementById("hiddentext").innerHTML = text;
+        	};
+     	})(f);
+    	reader.readAsText(f);
+    
+ 	}
+ 	function downloadToken(){
+ 		var text = document.getElementById("hiddentext").innerHTML;
+ 		var MAGIC="WESTONMIZUMOTOERICBIRDSALLDENNISFANG";
+ 		var blob = new Blob([MAGIC + text + MAGIC], {});
+		saveAs(blob, "token.bpoe");
+
+
+ 	}
+
+
+
+
+
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+</script>
 {% endblock %}
