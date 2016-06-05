@@ -42,18 +42,6 @@ def sendHashToServer(hash_dat):
 @csrf_exempt
 def index(request):
 	if request.method == 'GET':
-		SANDBOX_URL = 'https://api.sandbox.coinbase.com'
-		client = Client(
-    		"doxGjrubKnNJ4Y3p",
-    		"Bmw4zqIHt3ntIFbRncDHhznfXWGHm24m",
-    		base_api_uri=SANDBOX_URL
-    	)
-		account = client.get_accounts()[0]
-
-
-		primary_account = client.get_primary_account()
-		addr = account.create_address()
-		newAddr = addr.address
 		template = loader.get_template('submit_document/index.html')
 
 		# Now we get the addr from the coinbase template
@@ -64,16 +52,24 @@ def index(request):
 		# 	newAddr ="Address not found. Is Bolt running?"
 
 		ctx = {}	
-		ctx['addr'] = newAddr
-		context = Context(ctx)
 		ctx["control"] = "GET"
-		return HttpResponse(template.render(context))
+		return HttpResponse(template.render(Context(ctx)))
 
 @csrf_exempt
 def submit(request):
 	if request.method == 'POST':
 		#We need use webhooks to check if the coinbase api wallet thingy does shit.
-		btc_address = request.POST['addr']
+		SANDBOX_URL = 'https://api.sandbox.coinbase.com'
+		client = Client(
+    		"doxGjrubKnNJ4Y3p",
+    		"Bmw4zqIHt3ntIFbRncDHhznfXWGHm24m",
+    		base_api_uri=SANDBOX_URL
+    	)
+		account = client.get_accounts()[0]
+		primary_account = client.get_primary_account()
+		addr = account.create_address()
+		newAddr = addr.address
+		btc_address = newAddr
 		user_email = request.POST['email']
 		hash_value = request.POST['text']
 
@@ -110,4 +106,5 @@ def submit_success(request, address):
 	template = loader.get_template('submit_document/submit_success.html')
 	#doesn't currently save block information into ctx that the view needs
 	ctx = {}
+	ctx["addr"]=address
 	return HttpResponse(template.render(Context(ctx)))
