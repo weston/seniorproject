@@ -18,14 +18,13 @@
 			<b><p style ="font-size:16px"> {{addr}}</p></b>
 		{% endif %}
 		
-
+	<br/><br/>
 	<center>
 		<input type="file" id="files" name="files[]"/>
 	</center>
 	<form action="/submit_document/" method="post">
 		{% csrf_token %}
 	  <fieldset class="form-group">
-	  <br>
 	  <br>
 	  <center>
 	  	<label for="email">Notification Email:</label>
@@ -38,10 +37,6 @@
 
 	    </center>
 	  </fieldset>
-
-
-	
-
 			  {% comment %}
 			  <fieldset class="form-group">
 			    <label for="exampleInputFile">File input</label>
@@ -57,6 +52,8 @@
 		</div>
 	</div>
 </div>   
+
+
 <script>
   function handleFileSelect(evt) {
     var f = evt.target.files[0]; 
@@ -81,11 +78,6 @@
 
 
  	}
-
-
-
-
-
   document.getElementById('files').addEventListener('change', handleFileSelect, false);
 </script>
 
