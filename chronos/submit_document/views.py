@@ -23,6 +23,16 @@ SECONDARY_SEND_PORT = 7141
 @csrf_exempt
 def index(request):
 	if request.method == 'GET':
+		template = loader.get_template('submit_document/index.html')
+
+		ctx = {}	
+		ctx["control"] = "GET"
+		return HttpResponse(template.render(Context(ctx)))
+
+@csrf_exempt
+def submit(request):
+	if request.method == 'POST':
+		#We need use webhooks to check if the coinbase api wallet thingy does shit.
 		SANDBOX_URL = 'https://api.sandbox.coinbase.com'
 		client = Client(
     		"doxGjrubKnNJ4Y3p",
@@ -30,24 +40,10 @@ def index(request):
     		base_api_uri=SANDBOX_URL
     	)
 		account = client.get_accounts()[0]
-
-
 		primary_account = client.get_primary_account()
 		addr = account.create_address()
 		newAddr = addr.address
-		template = loader.get_template('submit_document/index.html')
-
-		ctx = {}	
-		ctx['addr'] = newAddr
-		context = Context(ctx)
-		ctx["control"] = "GET"
-		return HttpResponse(template.render(context))
-
-@csrf_exempt
-def submit(request):
-	if request.method == 'POST':
-		#We need use webhooks to check if the coinbase api wallet thingy does shit.
-		btc_address = request.POST['addr']
+		btc_address = newAddr
 		user_email = request.POST['email']
 		hash_value = request.POST['text']
 
@@ -56,7 +52,7 @@ def submit(request):
 						   hash_value=hash_value,
 						   payment_received=False)
 
-		#user.save()
+		user.save()
 
 		success = False
 		try:
@@ -83,4 +79,5 @@ def submit_success(request, address):
 	template = loader.get_template('submit_document/submit_success.html')
 	#doesn't currently save block information into ctx that the view needs
 	ctx = {}
+	ctx["addr"]=address
 	return HttpResponse(template.render(Context(ctx)))
