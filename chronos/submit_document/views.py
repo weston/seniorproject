@@ -52,7 +52,8 @@ def submit(request):
 		user = User(email=user_email,
 						   btc_address=btc_address,
 						   hash_value=hash_value,
-						   payment_received=False)
+						   payment_received=False,
+						   txn_hash="null")
 
 		user.save()
 
