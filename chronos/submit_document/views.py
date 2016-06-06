@@ -84,6 +84,7 @@ def verify_document(request):
 def document_query(request):
 	if request.method == 'POST':
 		hash_value = request.POST['text']
+		stage_dict={}
 		try:
 			user = User.objects.get(hash_value=hash_value)
 		except ObjectDoesNotExist:
@@ -92,10 +93,11 @@ def document_query(request):
    		stage = 1
    		if user.payment_received == True:
    			stage = 3
+   			stage_dict["txn_hash"]=user.txn_hash
    		#if user.transaction_accepted == True:
    		#	stage = 4
 		#TODO:figure out which stage the user as at
-		stage_dict = {'stage':stage}
+		stage_dict['stage']=stage
 		return HttpResponse(json.dumps(stage_dict), content_type="application/json")
 
 def about(request):

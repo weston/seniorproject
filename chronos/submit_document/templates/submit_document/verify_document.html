@@ -30,7 +30,6 @@
             </div>
         
         </div>
-        <div class="container">
       
         
             <div class="row bs-wizard" style="border-bottom:0;">
@@ -50,8 +49,14 @@
                 </div>
                 <div class="col-xs-3 "></div>
 
-            </div>      
-  </div>
+            </div>
+
+<div class = "row">
+<center>
+<a id='block_link'></a>
+</center>
+</div>
+
  
  
 <script>
@@ -87,8 +92,14 @@
                 document.getElementById("prog2").className="col-xs-3 bs-wizard-step disabled"
                 if (stage >= 1)
                   document.getElementById("prog1").className="col-xs-3 bs-wizard-step complete"
-                if (stage >= 2)
+                if (stage >= 2){
                   document.getElementById("prog2").className="col-xs-3 bs-wizard-step complete"
+                
+                  txn_hash=data['txn_hash']
+                  url = 'https://www.blocktrail.com/tBTC/tx/' + txn_hash
+                  document.getElementById("block_link").href=url
+                  document.getElementById("block_link").innerHTML="View your document hash."
+              }
            }
          });
 
