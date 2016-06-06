@@ -1,17 +1,17 @@
 import smtplib
 import json
 import socket
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string, get_template
 from django.template import Context, Template
 from django.http import HttpResponse
 
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-
 from models import User
 
-
+from coinbase.wallet import client
 
 USERNAME    = 'chronobytesnoreply@gmail.com'
 PASSWORD = 'seniorproject2016'
@@ -62,6 +62,10 @@ def sendEmailToUser(to_email, txn_hash):
 
 @csrf_exempt
 def coinbase_hook(request):
+	# valid_callback = client.verify_callback(request.body, request.META['CB-SIGNATURE'])
+	# if not valid_callback:
+	# 	return HttpResponse()
+
 	payment_data = json.loads(request.body)
 	btc_address = payment_data['data']['address']
 	payment_amount = float(payment_data['additional_data']['amount']['amount'])
