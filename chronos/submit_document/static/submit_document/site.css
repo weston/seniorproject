@@ -26,6 +26,11 @@ input[type="file"] {
 	background-color:#004080;
 }
 
+.about-content {
+	margin: auto;
+	width: 60%;
+}
+
 
 .bs-wizard {margin-top: 40px;}
 
