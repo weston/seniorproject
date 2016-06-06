@@ -19,29 +19,22 @@
     	<br>
         <span id="file-selected"></span>
     </center>
-    <form action="/submit" method="post">
+    <form action="/submit" method="post" onsubmit="return validateForm()">
         {% csrf_token %}
       <fieldset class="form-group">
       <br>
       <center>
       <h4> We'll send verification instructions to your email.  </h4>
         <label for="email">Notification Email:</label>
-        <input class="form-control" name="email" rows="3" style="max-width:30%"></input>
+        <input class="form-control" name="email" rows="3" id = "email_id" style="max-width:30%" required></input>
         <br>
         <h4> Only a cryptographic hash of your file is needed so we never see the contents.  </h4>
         <label for="text">Document Hash:</label>
-        <textarea readonly class="form-control" name="text" rows="1" id = 'textarea' style="max-width:50%"></textarea>
+        <textarea required readonly class="form-control" name="text" rows="1" id = 'textarea' style="max-width:50%"></textarea>
  
         </center>
       </fieldset>
-              {% comment %}
-              <fieldset class="form-group">
-                <label for="exampleInputFile">File input</label>
-                <input type="file" class="form-control-file" id="exampleInputFile">
-                <small class="text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
-              </fieldset>
-              {% endcomment %}
-              <center><button type="submit" class="btn btn-primary"style="padding-left: 100px; padding-right: 100px" onclick="downloadToken()">Submit</button></center>
+              <center><button type="submit" class="btn btn-primary" id = "submit_button" style="padding-left: 100px; padding-right: 100px" onclick="downloadToken()">Submit</button></center>
             </form>
             <h5> <br>Upon submission you will receive a bitcoin wallet address to send payment to. </h5>
             <h5> <br>Additionally, your browser will download a token for use in future timestamp verification. Don't lose it! </h5>
@@ -83,15 +76,37 @@ String.prototype.hexEncode = function(){
    
     }
     function downloadToken(){
+
+        var email = document.getElementById("email_id").value;
+        if (email == null || email == ""){
+          return;
+        }
+        var hash = document.getElementById("textarea").innerHTML;
+        if (hash == null || hash == ""){
+          return;
+        }
+
+
         var text = document.getElementById("hiddentext").innerHTML;
         var MAGIC="WESTONMIZUMOTOERICBIRDSALLDENNISFANG";
         var blob = new Blob([MAGIC + text + MAGIC], {});
         saveAs(blob, "token.bpoe");
-
-
- 
- 
     }
+
+    function validateForm(){
+        var email = document.getElementById("email_id").value;
+        if (email == null || email == ""){
+          return false;
+        }
+        var hash = document.getElementById("textarea").innerHTML;
+        if (hash == null || hash == ""){
+          return false;
+        }
+        return true;
+
+    }
+
+
   document.getElementById('files').addEventListener('change', handleFileSelect, false);
   // $('#files').bind('change',
   // 						 function() {
