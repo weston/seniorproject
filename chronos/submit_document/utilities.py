@@ -18,6 +18,11 @@ PASSWORD = 'seniorproject2016'
 
 MIN_PAYMENT = float(5 / 1000)
 
+RECV_HOST = "localhost"
+RECV_PORT = 8050
+SEND_HOST = "localhost"
+SEND_PORT = 7140
+SECONDARY_SEND_PORT = 7141
 
 def sendHashToServer(hash_dat):
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
