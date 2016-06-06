@@ -2,6 +2,7 @@
  
 {% block content %}
 {% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'submit_document/site.css' %}" />
 <script src="{% static 'submit_document/FileSaver.js' %}"></script>
 <script src = "http://www.bichlmeier.info/sha256.js"></script>
 <div class="row">
@@ -10,7 +11,13 @@
     <br/><br/>
     <center>
     <h4> Choose a file to timestamp.</h4>
-        <input type="file" id="files" name="files[]"/>
+    	<label class="btn btn-primary">
+    		Choose File to Upload
+        	<input type="file" id="files" name="files[]"/>
+    	</label>
+    	<br>
+    	<br>
+        <span id="file-selected"></span>
     </center>
     <form action="/submit" method="post">
         {% csrf_token %}
@@ -67,10 +74,18 @@
         var MAGIC="WESTONMIZUMOTOERICBIRDSALLDENNISFANG";
         var blob = new Blob([MAGIC + text + MAGIC], {});
         saveAs(blob, "token.bpoe");
+
+
  
  
     }
   document.getElementById('files').addEventListener('change', handleFileSelect, false);
+  $('#files').bind('change',
+  						 function() {
+  						 	var fileName = '';
+  						 	fileName = $(this).val().replace(/C:\\fakepath\\/i, '');
+  							$('#file-selected').html(fileName);
+  						})
 </script>
  
  
