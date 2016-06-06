@@ -7,6 +7,8 @@ from models import User
 import utilities
 from django.shortcuts import redirect
 import json
+from django.core.exceptions import ObjectDoesNotExist
+
 
 
 #Coinbase API
@@ -82,9 +84,17 @@ def verify_document(request):
 def document_query(request):
 	if request.method == 'POST':
 		hash_value = request.POST['text']
-		user = User.objects.get(hash_value=hash_value)
-
+		try:
+			user = User.objects.get(hash_value=hash_value)
+		except ObjectDoesNotExist:
+   			stage_dict = {'stage':0}
+			return HttpResponse(json.dumps(stage_dict), content_type="application/json")
+   		stage = 1
+   		if user.payment_received == True:
+   			stage = 3
+   		#if user.transaction_accepted == True:
+   		#	stage = 4
 		#TODO:figure out which stage the user as at
-		stage_dict = {'stage':1}
+		stage_dict = {'stage':stage}
 		return HttpResponse(json.dumps(stage_dict), content_type="application/json")
 
