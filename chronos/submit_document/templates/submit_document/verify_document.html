@@ -41,8 +41,6 @@
         return function(e) {
             var text = e.target.result;
             text = text.substr(MAGIC.length,text.length - 2*MAGIC.length)
-            var blob = new Blob([text], {});
-            saveAs(blob, "token.bpoe");
             var hash = sha256_digest(text);
             document.getElementById("textarea").innerHTML = hash;
             document.getElementById("hiddentext").innerHTML = text;
@@ -60,7 +58,7 @@
            data: $("#verify_form").serialize(), // serializes the form's elements.
            success: function(data)
            {
-               alert(data); // show response from the php script.
+               alert(data['stage']); // show response from the php script.
            }
          });
 
