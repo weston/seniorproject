@@ -98,3 +98,9 @@ def document_query(request):
 		stage_dict = {'stage':stage}
 		return HttpResponse(json.dumps(stage_dict), content_type="application/json")
 
+def about(request):
+	template = loader.get_template('submit_document/about.html')
+	ctx = {}	
+	ctx["control"] = "GET"
+	return HttpResponse(template.render(ctx))
+
