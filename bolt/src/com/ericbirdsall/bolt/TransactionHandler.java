@@ -83,16 +83,7 @@ public class TransactionHandler {
     	    ///
 	    	
 
-	    }
-	   
-	    
-    
-	    
-	    
-	    
-	    
-
-        
+	    }        
         //kit.stop();
 
 	}
