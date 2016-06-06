@@ -26,7 +26,8 @@
       <center>
       <h4> We'll send verification instructions to your email.  </h4>
         <label for="email">Notification Email:</label>
-        <input class="form-control" name="email" rows="3" id = "email_id" style="max-width:30%" required></input>
+        <input class="form-control" name="email" rows="3" id = "email_id" style="max-width:30%" autocomplete="off" onkeyup="validateEmail()" required></input>
+        <label id = "email_notif"></label>
         <br>
         <h4> Only a cryptographic hash of your file is needed so we never see the contents.  </h4>
         <label for="text">Document Hash:</label>
@@ -76,17 +77,9 @@ String.prototype.hexEncode = function(){
    
     }
     function downloadToken(){
-
-        var email = document.getElementById("email_id").value;
-        if (email == null || email == ""){
+        if (!validateForm()){
           return;
         }
-        var hash = document.getElementById("textarea").innerHTML;
-        if (hash == null || hash == ""){
-          return;
-        }
-
-
         var text = document.getElementById("hiddentext").innerHTML;
         var MAGIC="WESTONMIZUMOTOERICBIRDSALLDENNISFANG";
         var blob = new Blob([MAGIC + text + MAGIC], {});
@@ -95,7 +88,7 @@ String.prototype.hexEncode = function(){
 
     function validateForm(){
         var email = document.getElementById("email_id").value;
-        if (email == null || email == ""){
+        if (!isAnEmail(email)){
           return false;
         }
         var hash = document.getElementById("textarea").innerHTML;
@@ -104,6 +97,26 @@ String.prototype.hexEncode = function(){
         }
         return true;
 
+    }
+
+    function validateEmail(){
+      var elem = document.getElementById("email_id")
+      var email = elem.value;
+      if (isAnEmail(email)){
+        elem.style.background = '#ccffcc';
+        document.getElementById("email_notif").innerHTML = "";
+
+      }else{
+        elem.style.background = '#f8d3d3';
+        document.getElementById("email_notif").innerHTML = "Please enter a valid email.";
+      } 
+      
+    }
+
+
+    function isAnEmail(email) {
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
     }
 
 
