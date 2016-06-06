@@ -91,3 +91,9 @@ def verify_document(request):
 	ctx["control"] = "GET"
 	return HttpResponse(template.render(Context(ctx)))
 
+@csrf_exempt
+def document_query(request):
+	if request.method == 'POST':
+		hash_value = request.POST['text']
+		return 0
+
