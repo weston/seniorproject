@@ -32,19 +32,17 @@ def sendHashToServer(hash_dat):
 
 def sendEmailToUser(to_email, txn_hash):
 	msg = MIMEMultipart('alternative')
-	msg['Subject'] = "Link"
+	msg['Subject'] = "Your chronobyt.es submission"
 	msg['From'] = USERNAME
 	msg['To'] = to_email
-	# ctx = {
-	# 	'HASH_PLACEHOLDER': txn_hash,
-	# 	'EMAIL_PLACEHOLDER': to_email
-	# }
 
-	#html_message = get_template('static/email_body.html').render(Context(ctx))
+	ctx = {
+		'EMAIL': to_email,
+		'HASH': txn_hash
+	}
+
 	text_message = "Text version"
-	html_message = render_to_string('email_body.html', {})
-	html_message = html_message.replace("HASH_PLACEHOLDER",txn_hash)
-	html_message = html_message.replace("EMAIL_PLACEHOLDER",to_email)
+	html_message = render_to_string('email_body.html', ctx)
 
 	msg.attach(MIMEText(text_message, 'plain'))
 	msg.attach(MIMEText(html_message, 'html'))

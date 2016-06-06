@@ -27,7 +27,7 @@ def index(request):
 
 		ctx = {}	
 		ctx["control"] = "GET"
-		return HttpResponse(template.render(Context(ctx)))
+		return HttpResponse(template.render(ctx))
 
 @csrf_exempt
 def submit(request):
@@ -80,7 +80,7 @@ def submit_success(request, address):
 	#doesn't currently save block information into ctx that the view needs
 	ctx = {}
 	ctx["addr"]=address
-	return HttpResponse(template.render(Context(ctx)))
+	return HttpResponse(template.render(ctx))
 
 
 @csrf_exempt
@@ -89,7 +89,7 @@ def verify_document(request):
 
 	ctx = {}	
 	ctx["control"] = "GET"
-	return HttpResponse(template.render(Context(ctx)))
+	return HttpResponse(template.render(ctx))
 
 @csrf_exempt
 def document_query(request):
