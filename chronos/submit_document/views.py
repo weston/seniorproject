@@ -92,9 +92,6 @@ def document_query(request):
    			stage_dict = {'stage':0}
 			return HttpResponse(json.dumps(stage_dict), content_type="application/json")
    		stage = 1
-   		if user.count > 1: 
-   			user = user[0]
-   			
    		if user.payment_received == True:
    			stage = 3
    			stage_dict["txn_hash"]=user.txn_hash
