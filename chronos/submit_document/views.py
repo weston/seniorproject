@@ -54,6 +54,7 @@ def submit(request):
 
 		user.save()
 
+		ctx = {}
 		ctx['control'] = "POST"
 		return redirect('submit_success', address=btc_address)
 
