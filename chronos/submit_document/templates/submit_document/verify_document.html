@@ -10,7 +10,7 @@
     <h4> Upload your token.</h4>
         <input type="file" id="files" name="files[]"/>
     </center>
-    <form action="/submit" method="post">
+    <form action="/submit" method="post" id="verify_form">
         {% csrf_token %}
       <fieldset class="form-group">
       <br>
@@ -21,7 +21,7 @@
  
         </center>
       </fieldset>
-              <center><button type="submit" class="btn btn-primary"style="padding-left: 100px; padding-right: 100px" onclick="downloadToken()">Submit</button></center>
+              <center><button type="submit" class="btn btn-primary"style="padding-left: 100px; padding-right: 100px">Submit</button></center>
             </form>
             <div>
                 <textarea readonly hidden='true' id = 'hiddentext'></textarea>
@@ -49,14 +49,21 @@
         reader.readAsText(f);
    
     }
-    function downloadToken(){
-        var text = document.getElementById("hiddentext").innerHTML;
-    
-        var blob = new Blob([MAGIC + text + MAGIC], {});
-        saveAs(blob, "token.bpoe");
- 
- 
-    }
+  $("#verify_form").submit(function(e) {
+    var url = "/document_query/"; // the script where you handle the form input.
+
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: $("#verify_form").serialize(), // serializes the form's elements.
+           success: function(data)
+           {
+               alert(data['stage']); // show response from the php script.
+           }
+         });
+
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+  });
   document.getElementById('files').addEventListener('change', handleFileSelect, false);
 </script>
  

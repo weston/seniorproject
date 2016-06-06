@@ -6,6 +6,7 @@ from django.template import Context, Template
 from models import User
 import utilities
 from django.shortcuts import redirect
+import json
 
 
 #Coinbase API
@@ -46,7 +47,6 @@ def submit(request):
 		btc_address = newAddr
 		user_email = request.POST['email']
 		hash_value = request.POST['text']
-
 		user = User(email=user_email,
 						   btc_address=btc_address,
 						   hash_value=hash_value,
@@ -54,20 +54,6 @@ def submit(request):
 
 		user.save()
 
-		success = False
-		try:
-			blockhash = 'testvalue'
-			success = True
-		except Exception as e:
-			print e.stacktrace()
-
-		if success:
-			utilities.sendEmailToUser(user_email, blockhash)
-		else:
-			pass
-
-		ctx = {}
-		ctx['blockhash'] = blockhash
 		ctx['control'] = "POST"
 		return redirect('submit_success', address=btc_address)
 
@@ -90,4 +76,14 @@ def verify_document(request):
 	ctx = {}	
 	ctx["control"] = "GET"
 	return HttpResponse(template.render(ctx))
+
+@csrf_exempt
+def document_query(request):
+	if request.method == 'POST':
+		hash_value = request.POST['text']
+		user = User.objects.get(hash_value=hash_value)
+
+		#TODO:figure out which stage the user as at
+		stage_dict = {'stage':1}
+		return HttpResponse(json.dumps(stage_dict), content_type="application/json")
 
