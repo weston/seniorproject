@@ -2,6 +2,30 @@ input[type="file"] {
     display: none;
 }
 
+#navbar{
+	background-color:#0066cc;
+	border-bottom: 2px solid #e6e6e6;
+}
+
+.navbar-brand{
+	color: white !important;
+	font-weight: bold;
+	font-size: 175%;
+}
+.section{
+	color: white !important;
+	font-weight: bold;
+	font-size: 120%;
+}
+
+.btn.btn-primary{
+	background-color:#0059b3;
+}
+
+.btn.btn-primary:hover{
+	background-color:#004080;
+}
+
 
 .bs-wizard {margin-top: 40px;}
 
