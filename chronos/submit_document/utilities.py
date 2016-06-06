@@ -82,6 +82,10 @@ def coinbase_hook(request):
 	user.save()
 	
 	txn_hash = sendHashToServer(user.hash_value)
+	
+	user.txn_hash = txn_hash
+	user.save()
+
 	sendEmailToUser(user.email, txn_hash)
 
 	return HttpResponse()
