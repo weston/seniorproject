@@ -46,7 +46,6 @@ def submit(request):
 		btc_address = newAddr
 		user_email = request.POST['email']
 		hash_value = request.POST['text']
-
 		user = User(email=user_email,
 						   btc_address=btc_address,
 						   hash_value=hash_value,
@@ -81,5 +80,12 @@ def verify_document(request):
 def document_query(request):
 	if request.method == 'POST':
 		hash_value = request.POST['text']
-		return 0
+		print User.objects.get(hash_value=hash_value).hash_value
+		#user = User(hash_value=hash_value)
+		#print user.objects
+		template = loader.get_template('submit_document/verify_document.html')
+
+		ctx = {}	
+		ctx["control"] = "GET"
+		return HttpResponse(template.render(ctx))
 
