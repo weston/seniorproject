@@ -4,6 +4,10 @@
 
 chronos/submit_document/migrations/*
 
+*.spvchain
+*.wallet
+*.class
+
 .metadata
 bin/
 tmp/
