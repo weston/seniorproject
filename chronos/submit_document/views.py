@@ -6,6 +6,7 @@ from django.template import Context, Template
 from models import User
 import utilities
 from django.shortcuts import redirect
+import json
 
 
 #Coinbase API
@@ -80,12 +81,9 @@ def verify_document(request):
 def document_query(request):
 	if request.method == 'POST':
 		hash_value = request.POST['text']
-		print User.objects.get(hash_value=hash_value).hash_value
-		#user = User(hash_value=hash_value)
-		#print user.objects
-		template = loader.get_template('submit_document/verify_document.html')
+		user = User.objects.get(hash_value=hash_value)
 
-		ctx = {}	
-		ctx["control"] = "GET"
-		return HttpResponse(template.render(ctx))
+		#TODO:figure out which stage the user as at
+		stage_dict = {'stage':1}
+		return HttpResponse(json.dumps(stage_dict), content_type="application/json")
 
