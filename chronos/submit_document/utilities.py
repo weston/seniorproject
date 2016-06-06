@@ -70,7 +70,10 @@ def coinbase_hook(request):
 	btc_address = payment_data['data']['address']
 	payment_amount = float(payment_data['additional_data']['amount']['amount'])
 
-	user = User.objects.get(btc_address=btc_address)
+	try:
+		user = User.objects.get(btc_address=btc_address)
+	except:
+		return HttpResponse("Error finding user")
 
 	if not user:
 		return HttpResponse()
@@ -81,11 +84,17 @@ def coinbase_hook(request):
 	user.payment_received = True
 	user.save()
 	
-	txn_hash = sendHashToServer(user.hash_value)
-	
+	try:
+		txn_hash = sendHashToServer(user.hash_value)
+	except Exception as e:
+		return HttpResponse("Error sending hash to Bolt.")
+
 	user.txn_hash = txn_hash
 	user.save()
 
-	sendEmailToUser(user.email, txn_hash)
+	try:
+		sendEmailToUser(user.email, txn_hash)
+	except Exception as e:
+		return HttpResponse("Error emailing user")
 
 	return HttpResponse()
