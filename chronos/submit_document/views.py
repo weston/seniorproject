@@ -54,20 +54,6 @@ def submit(request):
 
 		user.save()
 
-		success = False
-		try:
-			blockhash = 'testvalue'
-			success = True
-		except Exception as e:
-			print e.stacktrace()
-
-		if success:
-			utilities.sendEmailToUser(user_email, blockhash)
-		else:
-			pass
-
-		ctx = {}
-		ctx['blockhash'] = blockhash
 		ctx['control'] = "POST"
 		return redirect('submit_success', address=btc_address)
 

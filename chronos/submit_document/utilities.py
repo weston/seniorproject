@@ -26,9 +26,9 @@ def sendHashToServer(hash_dat):
 	sock.close()
 	sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 	sock.connect((SEND_HOST,SECONDARY_SEND_PORT))
-	blockHash = sock.recv(1024)
+	txn_hash = sock.recv(1024)
 	sock.close()
-	return blockHash
+	return txn_hash
 
 def sendEmailToUser(to_email, txn_hash):
 	msg = MIMEMultipart('alternative')
@@ -72,6 +72,7 @@ def coinbase_hook(request):
 	user.payment_received = True
 	user.save()
 	
-	sendHashToServer(user.hash_value)
+	txn_hash = sendHashToServer(user.hash_value)
+	sendEmailToUser(user.email, txn_hash)
 
 	return HttpResponse()
