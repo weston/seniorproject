@@ -7,6 +7,11 @@ input[type="file"] {
 	border-bottom: 2px solid #e6e6e6;
 }
 
+.container {
+	font-family: 'Lato',
+	sans-serif;
+}
+
 .navbar-brand{
 	color: white !important;
 	font-weight: bold;
@@ -29,6 +34,10 @@ input[type="file"] {
 .about-content {
 	margin: auto;
 	width: 60%;
+}
+
+h5 {
+	font-size: 16px;
 }
 
 
