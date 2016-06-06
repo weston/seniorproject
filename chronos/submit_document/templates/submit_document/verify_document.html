@@ -52,7 +52,7 @@
             </div>
 
 <div class = "row">
-<center>
+<center id='messages'>
 <a id='block_link'></a>
 </center>
 </div>
@@ -90,11 +90,16 @@
                console.log(stage)
                 document.getElementById("prog1").className="col-xs-3 bs-wizard-step disabled"
                 document.getElementById("prog2").className="col-xs-3 bs-wizard-step disabled"
-                if (stage >= 1)
+                if (stage == 0){
+                  document.getElementById("messages").innerHTML="This document does not exist."
+                }
+                if (stage >= 1){
+                  document.getElementById("messages").innerHTML=''
                   document.getElementById("prog1").className="col-xs-3 bs-wizard-step complete"
+                }
                 if (stage >= 2){
                   document.getElementById("prog2").className="col-xs-3 bs-wizard-step complete"
-                
+                  document.getElementById('messages').innerHTML = "<a id='block_link'></a>"
                   txn_hash=data['txn_hash']
                   url = 'https://www.blocktrail.com/tBTC/tx/' + txn_hash
                   document.getElementById("block_link").href=url
